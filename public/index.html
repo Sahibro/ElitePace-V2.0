@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- ── META ──────────────────────────────────────────── -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0,
+             maximum-scale=1.0, user-scalable=no"/>
+  <meta name="description"
+    content="ElitePace — Premium Real-Time Presentation
+             Timer for Speakers and Event Managers.
+             No login required."/>
+  <meta name="theme-color" content="#0a0a0f"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title"
+    content="ElitePace"/>
+
+  <!-- ── OG TAGS ───────────────────────────────────────── -->
+  <meta property="og:title"
+    content="ElitePace — Real-Time Presentation Timer"/>
+  <meta property="og:description"
+    content="Premium timer for speakers and event managers.
+             Real-time sync. No login needed."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="/logo.svg"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title"
+    content="ElitePace — Presentation Timer"/>
+
+  <title>ElitePace — Real-Time Presentation Timer</title>
+
+  <!-- ── FAVICON ───────────────────────────────────────── -->
+  <link rel="icon" type="image/svg+xml" href="/logo.svg"/>
+  <link rel="apple-touch-icon" href="/logo.svg"/>
+
+  <!-- ── PWA MANIFEST ──────────────────────────────────── -->
+  <link rel="manifest" href="/manifest.json"/>
+
+  <!-- ── FONTS ─────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com"
+    crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap"
+    rel="stylesheet"/>
+
+  <!-- ── FONT AWESOME ──────────────────────────────────── -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <!-- ── MAIN CSS ───────────────────────────────────────── -->
+  <link rel="stylesheet" href="/style.css"/>
+
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  LOADING SCREEN                                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="loadingScreen" class="loading-screen">
+  <div class="loading-content">
+
+    <!-- Pulse rings -->
+    <div class="logo-wrapper">
+      <div class="pulse-ring ring-1"></div>
+      <div class="pulse-ring ring-2"></div>
+      <div class="pulse-ring ring-3"></div>
+
+      <!-- Logo box -->
+      <div class="logo-box">
+        <div class="logo-border-spin"></div>
+        <div class="logo-inner">
+          <div class="logo-svg-wrap">
+            <img src="/logo.svg"
+              alt="ElitePace Logo"
+              class="logo-svg-img"
+              onerror="this.style.display='none';
+                document.querySelector('.logo-fallback')
+                  .style.display='flex'"/>
+            <!-- Fallback if SVG fails -->
+            <div class="logo-fallback"
+              style="display:none">⚡</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brand name -->
+    <div class="brand-text-wrap">
+      <span class="brand-elite">ELITE</span>
+      <span class="brand-pace">PACE</span>
+    </div>
+
+    <!-- Tagline -->
+    <div class="brand-tagline">
+      Real-Time Presentation Timer
+    </div>
+
+    <!-- Version -->
+    <div class="brand-version">
+      <span class="v-dot"></span>
+      V2.0 — Powered by Socket.io
+    </div>
+
+    <!-- Loading bar -->
+    <div class="load-bar-wrap">
+      <div class="load-bar-fill">
+        <div class="load-bar-shine"></div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="load-status" id="connMsg">
+      <span class="status-spinner"></span>
+      <span id="loadStatusText">
+        Initializing ElitePace...
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  MAIN APP                                                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="app" class="app hidden">
+
+  <!-- Toast container -->
+  <div id="toastBox" class="toast-box"
+    aria-live="polite" role="status"></div>
+
+  <!-- Offline banner -->
+  <div id="offlineBanner"
+    class="offline-banner hidden">
+    <i class="fas fa-wifi-slash"></i>
+    <span>Offline Mode</span>
+    <span>Timer running locally</span>
+    <span class="ob-dot"></span>
+  </div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  VIEW 1: HOME                                           -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="homeView" class="view">
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation">
+    <div class="brand">
+      <img src="/logo.svg" alt="EP"
+        class="nav-logo"
+        onerror="this.style.display='none'"/>
+      <span class="brand-name">ElitePace</span>
+      <span class="version-badge">V2.0</span>
+    </div>
+    <div class="nav-right">
+      <div class="server-status" id="serverStatus"
+        title="Server connection status">
+        <span class="status-dot"></span>
+        <span class="status-text">Connecting...</span>
+      </div>
+      <button class="theme-btn" id="themeBtn"
+        title="Toggle Dark/Light Theme"
+        aria-label="Toggle Theme">
+        🌙
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="home-wrap">
+    <div class="hero">
+
+      <div class="hero-chip">
+        <span class="chip-dot"></span>
+        No Login · Instant Setup · Real-Time Sync
+      </div>
+
+      <h1 class="hero-h1">
+        Presentations,<br/>
+        <span class="grad-text">Perfectly Paced.</span>
+      </h1>
+
+      <p class="hero-p">
+        Multi-speaker queue, real-time sync globally,
+        private chat, audio alerts &amp; PDF reports
+        — everything in one premium tool.
+      </p>
+
+      <div class="hero-btns">
+        <button class="btn-primary big" id="createBtn">
+          <i class="fas fa-plus-circle"></i>
+          Create New Session
+        </button>
+        <button class="btn-ghost big" id="joinBtn">
+          <i class="fas fa-sign-in-alt"></i>
+          Join Session
+        </button>
+      </div>
+
+      <!-- Feature pills -->
+      <div class="feature-pills">
+        <span class="pill">⚡ Zero Delay Sync</span>
+        <span class="pill">🎤 Speaker Queue</span>
+        <span class="pill">💬 Private Chat</span>
+        <span class="pill">🔊 Audio Alerts</span>
+        <span class="pill">📊 PDF Reports</span>
+        <span class="pill">👥 Multi-Manager</span>
+        <span class="pill">📱 Mobile Ready</span>
+        <span class="pill">🌍 Works Globally</span>
+      </div>
+    </div>
+
+    <!-- Feature cards -->
+    <div class="feature-grid">
+      <div class="feat-card">
+        <div class="feat-icon"
+          style="background:linear-gradient(135deg,#7c5cff,#5c8fff)">
+          ⚡
+        </div>
+        <h3>Real-Time Sync</h3>
+        <p>Socket.io powered — zero delay,
+          anywhere in the world</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"
+          style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+          🎤
+        </div>
+        <h3>Speaker Queue</h3>
+        <p>Manage unlimited speakers with
+          individual time limits</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"
+          style="background:linear-gradient(135deg,#10b981,#3b82f6)">
+          💬
+        </div>
+        <h3>Private Chat</h3>
+        <p>Two-way messaging between
+          manager and speakers</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"
+          style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">
+          📊
+        </div>
+        <h3>Smart Reports</h3>
+        <p>Auto PDF &amp; Excel report
+          after every session</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="home-footer">
+    <p>
+      ElitePace V2.0 © 2025 ·
+      Built for Event Managers &amp; Speakers ·
+      <span class="footer-link" id="proLink">
+        Go Pro ✨
+      </span>
+    </p>
+  </footer>
+
+</section><!-- #homeView -->
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  VIEW 2: MANAGER                                        -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="managerView" class="view hidden">
+
+  <!-- Manager Navbar -->
+  <nav class="navbar manager-nav">
+    <div class="brand" id="mgrBrandHome"
+      style="cursor:pointer" title="Go Home">
+      <img src="/logo.svg" alt="EP"
+        class="nav-logo"
+        onerror="this.style.display='none'"/>
+      <span class="brand-name">ElitePace</span>
+    </div>
+
+    <!-- Room chip -->
+    <div class="room-chip">
+      <span class="rc-label">ROOM</span>
+      <span class="rc-id" id="mgrRoomId">------</span>
+      <button class="copy-chip" id="copyRoomId"
+        title="Copy Room ID">
+        <i class="fas fa-copy"></i>
+      </button>
+    </div>
+
+    <!-- Nav actions -->
+    <div class="nav-actions">
+      <div class="conn-indicator"
+        id="mgrConnDot" title="Connection Status">
+      </div>
+      <button class="nav-btn" id="reportPdfBtn"
+        title="Download PDF Report">
+        <i class="fas fa-file-pdf"></i>
+      </button>
+      <button class="nav-btn" id="reportXlsBtn"
+        title="Download Excel Report">
+        <i class="fas fa-file-excel"></i>
+      </button>
+      <button class="nav-btn danger"
+        id="endSessionBtn" title="End Session">
+        <i class="fas fa-stop-circle"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Manager Layout -->
+  <div class="mgr-layout">
+
+    <!-- ── COLUMN 1: Timer & Share ─────────────────────── -->
+    <div class="mgr-col">
+
+      <!-- Timer Setup + Control Card -->
+      <div class="card">
+        <div class="card-head">
+          <i class="fas fa-clock"></i>
+          Timer Control
+          <div class="card-actions">
+            <input type="number" id="tmMin"
+              value="15" min="1" max="180"
+              class="time-inp"
+              aria-label="Minutes"/>
+            <span class="time-sep">:</span>
+            <input type="number" id="tmSec"
+              value="0" min="0" max="59"
+              class="time-inp"
+              aria-label="Seconds"/>
+            <button class="btn-sm" id="setTimerBtn">
+              Set
+            </button>
+          </div>
+        </div>
+
+        <!-- Timer display -->
+        <div class="timer-display" id="mgrTimer"
+          aria-live="polite">
+          15:00
+        </div>
+        <div class="timer-label" id="mgrTimerLabel">
+          Ready to Start
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+          <button class="ctrl start" id="startBtn"
+            title="Start (Space)" aria-label="Start Timer">
+            <i class="fas fa-play"></i>
+          </button>
+          <button class="ctrl pause" id="pauseBtn"
+            disabled title="Pause"
+            aria-label="Pause Timer">
+            <i class="fas fa-pause"></i>
+          </button>
+          <button class="ctrl reset" id="resetBtn"
+            title="Reset" aria-label="Reset Timer">
+            <i class="fas fa-redo"></i>
+          </button>
+        </div>
+
+        <!-- Quick adjust -->
+        <div class="adj-row">
+          <button class="adj" data-adj="-300"
+            title="Subtract 5 minutes">-5m</button>
+          <button class="adj" data-adj="-60"
+            title="Subtract 1 minute">-1m</button>
+          <button class="adj" data-adj="60"
+            title="Add 1 minute">+1m</button>
+          <button class="adj" data-adj="300"
+            title="Add 5 minutes">+5m</button>
+        </div>
+      </div>
+
+      <!-- Share Card -->
+      <div class="card">
+        <div class="card-head">
+          <i class="fas fa-share-alt"></i>
+          Share with Speakers
+        </div>
+
+        <!-- QR Code -->
+        <div id="qrBox" class="qr-box"
+          aria-label="QR Code for speaker link">
+        </div>
+
+        <!-- URL row -->
+        <div class="url-row">
+          <span id="speakerUrl"
+            class="url-text">--</span>
+          <button class="copy-btn" id="copyUrlBtn"
+            title="Copy speaker link"
+            aria-label="Copy Link">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+
+        <!-- Share buttons -->
+        <div class="share-row">
+          <button class="btn-wa" id="waBtn">
+            <i class="fab fa-whatsapp"></i>
+            WhatsApp
+          </button>
+          <button class="btn-email" id="emailBtn">
+            <i class="fas fa-envelope"></i>
+            Email
+          </button>
+          <button class="btn-cohost"
+            id="addCoHostBtn">
+            <i class="fas fa-user-plus"></i>
+            Co-Host
+          </button>
+        </div>
+      </div>
+
+      <!-- Analytics Card -->
+      <div class="card">
+        <div class="card-head">
+          <i class="fas fa-chart-bar"></i>
+          Live Analytics
+        </div>
+        <div class="stats-grid">
+          <div class="stat">
+            <span class="stat-v"
+              id="sSpeakers">0</span>
+            <span class="stat-l">Speakers</span>
+          </div>
+          <div class="stat">
+            <span class="stat-v"
+              id="sMsgs">0</span>
+            <span class="stat-l">Messages</span>
+          </div>
+          <div class="stat">
+            <span class="stat-v"
+              id="sPauses">0</span>
+            <span class="stat-l">Pauses</span>
+          </div>
+          <div class="stat">
+            <span class="stat-v"
+              id="sClients">0</span>
+            <span class="stat-l">Connected</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- col 1 -->
+
+    <!-- ── COLUMN 2: Speakers & Messages ──────────────── -->
+    <div class="mgr-col">
+
+      <!-- Speaker Queue Card -->
+      <div class="card">
+        <div class="card-head">
+          <i class="fas fa-users"></i>
+          Speaker Queue
+          <button class="btn-sm accent"
+            id="addSpeakerBtn">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+
+        <div id="speakerQueue"
+          class="speaker-queue"
+          aria-live="polite">
+          <!-- Empty state -->
+          <div class="empty-queue" id="emptyQueue">
+            <i class="fas fa-microphone-slash"></i>
+            <p>No speakers added yet</p>
+            <button class="btn-sm"
+              id="addSpeakerBtn2">
+              Add First Speaker
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stealth Message Card -->
+      <div class="card">
+        <div class="card-head">
+          <i class="fas fa-paper-plane"></i>
+          Stealth Message
+          <span class="card-hint">
+            Silent to speaker
+          </span>
+        </div>
+
+        <textarea id="stealthMsg"
+          placeholder="Type message for speaker..."
+          rows="2" maxlength="200"
+          aria-label="Stealth message"></textarea>
+
+        <div class="msg-row">
+          <span class="char-c">
+            <span id="stealthCount">0</span>/200
+          </span>
+          <div>
+            <button class="btn-sm"
+              id="clearStealthBtn">
+              Clear
+            </button>
+            <button class="btn-sm accent"
+              id="sendStealthBtn">
+              <i class="fas fa-paper-plane"></i>
+              Send
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick messages -->
+        <div class="quick-row">
+          <button class="q-btn"
+            data-msg="Please wrap up!">
+            Wrap up
+          </button>
+          <button class="q-btn"
+            data-msg="Speed up please!">
+            Speed up
+          </button>
+          <button class="q-btn"
+            data-msg="Great pace! Keep going.">
+            Great pace
+          </button>
+          <button class="q-btn"
+            data-msg="Slow down a bit.">
+            Slow down
+          </button>
+          <button class="q-btn"
+            data-msg="2 minutes left, please conclude.">
+            2 min left
+          </button>
+          <button class="q-btn"
+            data-msg="You're doing great!">
+            Great job!
+          </button>
+        </div>
+      </div>
+
+      <!-- AI Teaser Card -->
+      <div class="card ai-card">
+        <div class="ai-header">
+          <span class="pro-badge">✨ PRO</span>
+          <span>AI Tone Polish</span>
+        </div>
+        <p>AI crafts perfect messages based
+          on speaker behavior &amp; pacing</p>
+        <button class="btn-ai" id="aiBtn">
+          <i class="fas fa-wand-magic-sparkles"></i>
+          Polish with AI — Coming Soon
+        </button>
+      </div>
+
+    </div><!-- col 2 -->
+
+    <!-- ── COLUMN 3: Chat ──────────────────────────────── -->
+    <div class="mgr-col">
+
+      <!-- Chat Card -->
+      <div class="card chat-card">
+        <div class="card-head">
+          <i class="fas fa-comments"></i>
+          Live Chat
+          <span class="chat-badge"
+            id="chatCount">0</span>
+        </div>
+
+        <div id="chatMessages"
+          class="chat-messages"
+          aria-live="polite"
+          role="log">
+          <div class="chat-empty">
+            <i class="fas fa-comment-slash"></i>
+            <p>No messages yet</p>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <textarea id="chatInput"
+            placeholder="Message all speakers...
+(Ctrl+Enter to send)"
+            rows="2" maxlength="500"
+            aria-label="Chat message"></textarea>
+          <button class="btn-send"
+            id="sendChatBtn"
+            aria-label="Send message">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Speaker Preview Card -->
+      <div class="card">
+        <div class="card-head">
+          <i class="fas fa-eye"></i>
+          Speaker Screen Preview
+        </div>
+        <div class="spk-preview-box"
+          id="speakerPreviewBox">
+          <div class="spk-prev-timer"
+            id="previewTimer">
+            00:00
+          </div>
+          <div class="spk-prev-msg"
+            id="previewMsg"></div>
+        </div>
+        <div class="color-legend">
+          <span class="legend-item">
+            <span class="leg-dot dark"></span>
+            Normal
+          </span>
+          <span class="legend-item">
+            <span class="leg-dot gold"></span>
+            Last 2 min
+          </span>
+          <span class="legend-item">
+            <span class="leg-dot red"></span>
+            Time Up
+          </span>
+        </div>
+      </div>
+
+    </div><!-- col 3 -->
+
+  </div><!-- .mgr-layout -->
+
+  <!-- ── MANAGER MODALS ──────────────────────────────────── -->
+
+  <!-- Add Speaker Modal -->
+  <div id="addSpeakerModal"
+    class="modal-overlay hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="addSpkTitle">
+    <div class="modal">
+      <button class="modal-x"
+        id="closeAddSpeaker"
+        aria-label="Close">✕</button>
+      <h2 id="addSpkTitle">
+        <i class="fas fa-microphone"></i>
+        Add Speaker
+      </h2>
+      <p>Enter speaker details below</p>
+      <input type="text" id="spkName"
+        placeholder="Speaker Name *"
+        maxlength="50"
+        aria-label="Speaker name"
+        autocomplete="off"/>
+      <div class="time-row">
+        <div class="time-input-wrap">
+          <label for="spkMin">Minutes</label>
+          <input type="number" id="spkMin"
+            value="10" min="1" max="120"
+            aria-label="Time limit minutes"/>
+        </div>
+        <span class="time-sep-lg">:</span>
+        <div class="time-input-wrap">
+          <label for="spkSec">Seconds</label>
+          <input type="number" id="spkSec"
+            value="0" min="0" max="59"
+            aria-label="Time limit seconds"/>
+        </div>
+      </div>
+      <button class="btn-primary full"
+        id="confirmAddSpeaker">
+        <i class="fas fa-plus"></i>
+        Add to Queue
+      </button>
+    </div>
+  </div>
+
+  <!-- End Session Modal -->
+  <div id="endModal"
+    class="modal-overlay hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="endModalTitle">
+    <div class="modal">
+      <button class="modal-x" id="closeEnd"
+        aria-label="Close">✕</button>
+      <div class="modal-warn-icon">🛑</div>
+      <h2 id="endModalTitle">End Session?</h2>
+      <p>This will close the room for
+        all participants.</p>
+      <div class="feedback-section">
+        <label for="endFeedback">
+          Quick feedback (optional)
+        </label>
+        <textarea id="endFeedback"
+          placeholder="How was ElitePace today?
+What can we improve?"
+          rows="3"
+          aria-label="Session feedback">
+        </textarea>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-ghost"
+          id="cancelEnd">Cancel</button>
+        <button class="btn-danger"
+          id="confirmEnd">
+          <i class="fas fa-stop-circle"></i>
+          End Session
+        </button>
+      </div>
+    </div>
+  </div>
+
+</section><!-- #managerView -->
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  VIEW 3: SPEAKER                                        -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="speakerView" class="view hidden">
+  <div class="speaker-wrap" id="speakerWrap">
+
+    <!-- Status bar -->
+    <div class="spk-statusbar">
+      <span class="spk-conn"
+        id="spkConnStatus">
+        <i class="fas fa-circle"></i>
+        Connecting...
+      </span>
+      <span class="spk-room"
+        id="spkRoomBadge">
+        Room: --
+      </span>
+      <div class="spk-status-actions">
+        <button class="audio-btn"
+          id="audioToggle"
+          title="Toggle Audio Alerts"
+          aria-label="Toggle Audio Alerts">
+          <i class="fas fa-volume-mute"
+            id="audioIcon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Get Ready Alert -->
+    <div class="get-ready-alert hidden"
+      id="getReadyAlert"
+      role="alert">
+      <div class="gra-inner">
+        <div class="gra-icon">🎤</div>
+        <h2>GET READY!</h2>
+        <p>You're up next!</p>
+      </div>
+    </div>
+
+    <!-- Waiting State -->
+    <div class="spk-waiting" id="spkWaiting">
+      <div class="wait-icon">⏳</div>
+      <h2>Waiting for Manager</h2>
+      <p>Timer will start shortly</p>
+      <div class="wait-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <!-- Timer State -->
+    <div class="spk-timer-wrap"
+      id="spkTimerWrap"
+      style="display:none">
+      <div class="spk-name-label"
+        id="spkNameLabel">
+        PRESENTATION TIME
+      </div>
+      <div class="spk-timer"
+        id="spkTimer"
+        aria-live="polite">
+        --:--
+      </div>
+      <div class="spk-progress">
+        <div class="spk-prog-fill"
+          id="spkProgFill">
+        </div>
+      </div>
+    </div>
+
+    <!-- Stealth Message -->
+    <div class="spk-msg-area"
+      id="spkMsgArea">
+      <div class="spk-msg"
+        id="spkMsg"
+        aria-live="polite"
+        role="status">
+      </div>
+    </div>
+
+    <!-- Speaker Chat -->
+    <div class="spk-chat-wrap">
+      <div class="spk-chat-messages"
+        id="spkChatMessages"
+        aria-live="polite"
+        role="log">
+      </div>
+      <div class="spk-chat-input">
+        <input type="text"
+          id="spkChatInput"
+          placeholder="Message manager..."
+          maxlength="300"
+          aria-label="Message to manager"/>
+        <button id="spkSendChat"
+          aria-label="Send message">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Time Up Overlay -->
+    <div class="time-up-overlay hidden"
+      id="timeUpOverlay"
+      role="alert">
+      <div class="tuo-content">
+        <div class="tuo-icon">⏰</div>
+        <h1>TIME UP</h1>
+        <p>Please wrap up your presentation</p>
+      </div>
+    </div>
+
+    <!-- Brand watermark -->
+    <div class="spk-brand">
+      ⚡ ElitePace V2.0
+    </div>
+
+  </div>
+</section><!-- #speakerView -->
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  VIEW 4: SESSION ENDED                                  -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="endedView" class="view hidden">
+  <div class="ended-wrap">
+
+    <div class="ended-icon">🎉</div>
+    <h1>Session Complete!</h1>
+    <p>Thank you for using ElitePace</p>
+
+    <!-- Report downloads -->
+    <div class="report-btns">
+      <button class="btn-primary"
+        id="dlPdfBtn">
+        <i class="fas fa-file-pdf"></i>
+        Download PDF Report
+      </button>
+      <button class="btn-ghost"
+        id="dlXlsBtn">
+        <i class="fas fa-file-excel"></i>
+        Download Excel
+      </button>
+    </div>
+
+    <!-- Feedback prompt -->
+    <div class="ended-feedback-prompt">
+      <p>How was your experience?</p>
+      <div class="ended-fb-btns">
+        <button class="btn-primary"
+          id="giveFeedbackBtn">
+          <i class="fas fa-star"></i>
+          Rate ElitePace
+        </button>
+        <button class="btn-ghost"
+          id="reportProblemBtn">
+          <i class="fas fa-bug"></i>
+          Report a Problem
+        </button>
+      </div>
+    </div>
+
+    <button class="btn-ghost full mt"
+      onclick="goHome()">
+      <i class="fas fa-plus"></i>
+      Create New Session
+    </button>
+
+  </div>
+</section><!-- #endedView -->
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  VIEW 5: FEEDBACK                                       -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="speakerFeedbackView"
+  class="view hidden">
+  <div class="feedback-page">
+
+    <!-- Header -->
+    <div class="prob-header">
+      <button class="back-btn"
+        id="backFromFeedback"
+        aria-label="Go back">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div>
+        <h1>⭐ Rate ElitePace</h1>
+        <p>Your feedback helps us improve</p>
+      </div>
+    </div>
+
+    <!-- Star Rating -->
+    <div class="fb-card">
+      <h3>Overall Experience</h3>
+      <div class="star-rating" id="starRating"
+        role="group"
+        aria-label="Rate your experience">
+        <button class="star-btn" data-val="1"
+          aria-label="1 star">⭐</button>
+        <button class="star-btn" data-val="2"
+          aria-label="2 stars">⭐</button>
+        <button class="star-btn" data-val="3"
+          aria-label="3 stars">⭐</button>
+        <button class="star-btn" data-val="4"
+          aria-label="4 stars">⭐</button>
+        <button class="star-btn" data-val="5"
+          aria-label="5 stars">⭐</button>
+      </div>
+      <div class="rating-label" id="ratingLabel">
+        Tap a star to rate
+      </div>
+    </div>
+
+    <!-- Quick Tags -->
+    <div class="fb-card">
+      <h3>What did you like?</h3>
+      <div class="tag-grid">
+        <button class="tag-btn"
+          data-tag="easy-to-use">
+          👍 Easy to Use
+        </button>
+        <button class="tag-btn"
+          data-tag="color-alerts">
+          🎨 Color Alerts
+        </button>
+        <button class="tag-btn"
+          data-tag="no-distraction">
+          🧘 No Distraction
+        </button>
+        <button class="tag-btn"
+          data-tag="real-time">
+          ⚡ Real-Time Sync
+        </button>
+        <button class="tag-btn"
+          data-tag="audio-alerts">
+          🔊 Audio Alerts
+        </button>
+        <button class="tag-btn"
+          data-tag="clean-design">
+          ✨ Clean Design
+        </button>
+        <button class="tag-btn"
+          data-tag="speaker-queue">
+          🎤 Speaker Queue
+        </button>
+        <button class="tag-btn"
+          data-tag="chat">
+          💬 Live Chat
+        </button>
+      </div>
+    </div>
+
+    <!-- Message -->
+    <div class="fb-card">
+      <h3>Any suggestions?
+        <span class="optional">(Optional)</span>
+      </h3>
+      <textarea id="fbMessage"
+        placeholder="What feature do you want next?
+What could be better?"
+        rows="4" maxlength="500"
+        aria-label="Feedback message"></textarea>
+      <div class="fb-char">
+        <span id="fbCharCount">0</span>/500
+      </div>
+    </div>
+
+    <!-- Would Recommend -->
+    <div class="fb-card">
+      <h3>Would you recommend ElitePace?</h3>
+      <div class="recommend-btns">
+        <button class="rec-btn yes"
+          id="recYes">
+          👍 Yes, Definitely!
+        </button>
+        <button class="rec-btn no"
+          id="recNo">
+          👎 Not Really
+        </button>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button class="btn-primary full fb-submit"
+      id="submitFb">
+      <i class="fas fa-paper-plane"></i>
+      Submit Feedback
+    </button>
+
+    <button class="btn-skip" id="skipFb">
+      Skip for now
+    </button>
+
+  </div>
+</section><!-- #speakerFeedbackView -->
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  VIEW 6: PROBLEM REPORT                                 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="problemView" class="view hidden">
+  <div class="problem-page">
+
+    <!-- Header -->
+    <div class="prob-header">
+      <button class="back-btn"
+        id="backFromProblem"
+        aria-label="Go back">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div>
+        <h1>🐛 Report a Problem</h1>
+        <p>Help us fix issues faster</p>
+      </div>
+    </div>
+
+    <!-- Severity -->
+    <div class="fb-card">
+      <h3>Problem कितना serious था?</h3>
+      <div class="severity-grid">
+        <button class="sev-btn low"
+          data-sev="low">
+          <span class="sev-icon">🟡</span>
+          <span class="sev-label">Minor</span>
+          <span class="sev-desc">
+            थोड़ी सी problem
+          </span>
+        </button>
+        <button class="sev-btn medium"
+          data-sev="medium">
+          <span class="sev-icon">🟠</span>
+          <span class="sev-label">Medium</span>
+          <span class="sev-desc">
+            काम रुका नहीं
+          </span>
+        </button>
+        <button class="sev-btn high"
+          data-sev="high">
+          <span class="sev-icon">🔴</span>
+          <span class="sev-label">High</span>
+          <span class="sev-desc">
+            काफी problem हुई
+          </span>
+        </button>
+        <button class="sev-btn critical"
+          data-sev="critical">
+          <span class="sev-icon">💥</span>
+          <span class="sev-label">Critical</span>
+          <span class="sev-desc">
+            Tool बंद हो गया
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Problem Type -->
+    <div class="fb-card">
+      <h3>Problem किस चीज़ में थी?</h3>
+      <div class="prob-types" id="probTypes">
+
+        <!-- Connection -->
+        <div class="prob-category"
+          data-type="connection">
+          <div class="prob-cat-header">
+            <span>🌐 Connection Problem</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="prob-sub-list">
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="timer-not-syncing"/>
+              Timer sync नहीं हुआ
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="connecting-stuck"/>
+              "Connecting" पर अटक गया
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="frequent-disconnect"/>
+              बार-बार disconnect हुआ
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="room-not-found"/>
+              Room नहीं मिला
+            </label>
+          </div>
+        </div>
+
+        <!-- Timer -->
+        <div class="prob-category"
+          data-type="timer">
+          <div class="prob-cat-header">
+            <span>⏱️ Timer Problem</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="prob-sub-list">
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="timer-not-showing"/>
+              Timer दिख नहीं रहा था
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="timer-wrong-time"/>
+              Timer गलत time दिखा
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="timer-delayed"/>
+              Timer में delay था
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="color-not-changed"/>
+              Color change नहीं हुआ
+            </label>
+          </div>
+        </div>
+
+        <!-- Audio -->
+        <div class="prob-category"
+          data-type="audio">
+          <div class="prob-cat-header">
+            <span>🔊 Audio Problem</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="prob-sub-list">
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="no-audio"/>
+              Audio बिल्कुल नहीं आई
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="audio-unclear"/>
+              Audio unclear था
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="audio-late"/>
+              Audio late आई
+            </label>
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div class="prob-category"
+          data-type="message">
+          <div class="prob-cat-header">
+            <span>💬 Message Problem</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="prob-sub-list">
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="message-not-received"/>
+              Message नहीं पहुंचा
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="message-delayed"/>
+              Message देर से आया
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="chat-not-working"/>
+              Chat काम नहीं किया
+            </label>
+          </div>
+        </div>
+
+        <!-- Display -->
+        <div class="prob-category"
+          data-type="display">
+          <div class="prob-cat-header">
+            <span>📱 Display Problem</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="prob-sub-list">
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="mobile-layout-broken"/>
+              Mobile पर layout टूटा था
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="screen-sleep"/>
+              Screen सो गई presentation में
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="text-not-readable"/>
+              Text पढ़ नहीं आया
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="qr-not-working"/>
+              QR Code scan नहीं हुआ
+            </label>
+          </div>
+        </div>
+
+        <!-- Other -->
+        <div class="prob-category"
+          data-type="other">
+          <div class="prob-cat-header">
+            <span>🔧 Other Problem</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="prob-sub-list">
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="page-crashed"/>
+              Page crash हो गया
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="slow-loading"/>
+              बहुत slow था
+            </label>
+            <label class="sub-check">
+              <input type="checkbox"
+                data-sub="report-not-generated"/>
+              Report download नहीं हुई
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- When -->
+    <div class="fb-card">
+      <h3>Problem कब हुई?</h3>
+      <div class="when-grid">
+        <button class="when-btn"
+          data-when="session-start">
+          🟢 Session शुरू होते ही
+        </button>
+        <button class="when-btn"
+          data-when="middle">
+          🟡 Session के बीच में
+        </button>
+        <button class="when-btn"
+          data-when="end">
+          🔴 Session के अंत में
+        </button>
+        <button class="when-btn"
+          data-when="always">
+          🔄 पूरे समय
+        </button>
+      </div>
+    </div>
+
+    <!-- Fixed itself -->
+    <div class="fb-card">
+      <h3>क्या Problem खुद ठीक हो गई?</h3>
+      <div class="fixed-btns">
+        <button class="fixed-btn"
+          data-fixed="true">
+          ✅ हाँ, खुद ठीक हो गई
+        </button>
+        <button class="fixed-btn"
+          data-fixed="false">
+          ❌ नहीं, Problem रही
+        </button>
+        <button class="fixed-btn"
+          data-fixed="refresh">
+          🔄 Refresh करने पर ठीक हुई
+        </button>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="fb-card">
+      <h3>Detail में बताएं
+        <span class="optional">(Optional)</span>
+      </h3>
+      <textarea id="probDesc"
+        placeholder="जैसे:
+• Banaras में timer show नहीं हुआ
+• QR scan किया पर Connecting पर रुक गया
+• Mobile screen सो गई presentation में"
+        rows="4" maxlength="1000"
+        aria-label="Problem description">
+      </textarea>
+      <div class="fb-char">
+        <span id="probCharCount">0</span>/1000
+      </div>
+    </div>
+
+    <!-- Device Info -->
+    <div class="fb-card device-info-card">
+      <h3>📱 Your Device Info</h3>
+      <p class="info-note">
+        Auto-detected — helps us fix faster
+      </p>
+      <div class="device-grid">
+        <div class="device-item">
+          <span class="device-label">Device</span>
+          <span class="device-val"
+            id="detDevice">--</span>
+        </div>
+        <div class="device-item">
+          <span class="device-label">Browser</span>
+          <span class="device-val"
+            id="detBrowser">--</span>
+        </div>
+        <div class="device-item">
+          <span class="device-label">Network</span>
+          <span class="device-val"
+            id="detNetwork">--</span>
+        </div>
+        <div class="device-item">
+          <span class="device-label">Screen</span>
+          <span class="device-val"
+            id="detScreen">--</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button class="btn-primary full fb-submit"
+      id="submitProblem">
+      <i class="fas fa-bug"></i>
+      Submit Problem Report
+    </button>
+
+    <button class="btn-skip" id="skipProblem">
+      Skip — No Problem
+    </button>
+
+  </div>
+</section><!-- #problemView -->
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  VIEW 7: THANK YOU                                      -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="thankYouView" class="view hidden">
+  <div class="thankyou-page">
+
+    <div class="ty-icon">🙏</div>
+    <h1>Thank You!</h1>
+    <p>Your feedback helps us improve ElitePace
+      for everyone</p>
+
+    <div class="ty-share">
+      <p>Share ElitePace with your team!</p>
+      <button class="ty-wa" id="shareTyWa">
+        <i class="fab fa-whatsapp"></i>
+        Share on WhatsApp
+      </button>
+    </div>
+
+    <button class="btn-ghost full mt"
+      onclick="goHome()">
+      <i class="fas fa-plus"></i>
+      Create New Session
+    </button>
+
+  </div>
+</section><!-- #thankYouView -->
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  JOIN MODAL (Home)                                      -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div id="joinModal"
+  class="modal-overlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="joinModalTitle">
+  <div class="modal">
+    <button class="modal-x" id="closeJoin"
+      aria-label="Close">✕</button>
+    <h2 id="joinModalTitle">
+      <i class="fas fa-sign-in-alt"></i>
+      Join Session
+    </h2>
+    <p>Enter the Room ID from your manager</p>
+    <input type="text" id="joinRoomInput"
+      placeholder="Room ID (e.g. A3X9K2)"
+      maxlength="6"
+      autocomplete="off"
+      autocapitalize="characters"
+      spellcheck="false"
+      aria-label="Room ID"/>
+    <input type="text" id="joinNameInput"
+      placeholder="Your Name *"
+      maxlength="30"
+      autocomplete="name"
+      aria-label="Your name"/>
+    <div class="modal-btns">
+      <button class="btn-ghost"
+        id="joinAsSpeaker">
+        <i class="fas fa-microphone"></i>
+        Join as Speaker
+      </button>
+      <button class="btn-primary"
+        id="joinAsCoHost">
+        <i class="fas fa-user-shield"></i>
+        Join as Co-Host
+      </button>
+    </div>
+  </div>
+</div>
+
+</div><!-- #app -->
+
+<!-- ── QR CODE LIBRARY ────────────────────────────────────── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- ── SOCKET.IO ──────────────────────────────────────────── -->
+<script src="/socket.io/socket.io.js"></script>
+
+<!-- ── MAIN SCRIPT ───────────────────────────────────────── -->
+<script src="/script.js"></script>
+
+<!-- ── PWA SERVICE WORKER ────────────────────────────────── -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((reg) => {
+          console.log('✅ SW registered:', reg.scope);
+        })
+        .catch((err) => {
+          console.warn('⚠️ SW registration failed:', err);
+        });
+    });
+  }
+</script>
+
+</body>
+</html>
