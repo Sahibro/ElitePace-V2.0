@@ -1,0 +1,535 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 400 400"
+     width="400" height="400"
+     role="img"
+     aria-label="ElitePace Logo">
+
+  <defs>
+
+    <!-- ── GRADIENTS ─────────────────────────────────────── -->
+
+    <linearGradient id="mainGrad"
+      x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"
+        style="stop-color:#7c5cff;stop-opacity:1"/>
+      <stop offset="50%"
+        style="stop-color:#9d7fff;stop-opacity:1"/>
+      <stop offset="100%"
+        style="stop-color:#5c8fff;stop-opacity:1"/>
+    </linearGradient>
+
+    <linearGradient id="goldGrad"
+      x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"
+        style="stop-color:#f59e0b;stop-opacity:1"/>
+      <stop offset="100%"
+        style="stop-color:#fbbf24;stop-opacity:1"/>
+    </linearGradient>
+
+    <radialGradient id="bgGrad"
+      cx="50%" cy="40%" r="60%">
+      <stop offset="0%"
+        style="stop-color:#1e1040;stop-opacity:1"/>
+      <stop offset="60%"
+        style="stop-color:#110d28;stop-opacity:1"/>
+      <stop offset="100%"
+        style="stop-color:#0a0a0f;stop-opacity:1"/>
+    </radialGradient>
+
+    <radialGradient id="centerGlow"
+      cx="50%" cy="50%" r="50%">
+      <stop offset="0%"
+        style="stop-color:#7c5cff;stop-opacity:0.15"/>
+      <stop offset="100%"
+        style="stop-color:#7c5cff;stop-opacity:0"/>
+    </radialGradient>
+
+    <linearGradient id="shimmerGrad"
+      x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"
+        style="stop-color:rgba(255,255,255,0)"/>
+      <stop offset="50%"
+        style="stop-color:rgba(255,255,255,0.08)"/>
+      <stop offset="100%"
+        style="stop-color:rgba(255,255,255,0)"/>
+    </linearGradient>
+
+    <linearGradient id="boltGrad"
+      x1="0%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%"
+        style="stop-color:#a78bff;stop-opacity:1"/>
+      <stop offset="50%"
+        style="stop-color:#7c5cff;stop-opacity:1"/>
+      <stop offset="100%"
+        style="stop-color:#5c8fff;stop-opacity:1"/>
+    </linearGradient>
+
+    <linearGradient id="handGrad"
+      x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"
+        style="stop-color:#fbbf24;stop-opacity:1"/>
+      <stop offset="100%"
+        style="stop-color:#f59e0b;stop-opacity:0.3"/>
+    </linearGradient>
+
+    <linearGradient id="ringGrad1"
+      x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"
+        style="stop-color:#7c5cff;stop-opacity:1"/>
+      <stop offset="50%"
+        style="stop-color:#5c8fff;stop-opacity:0.5"/>
+      <stop offset="100%"
+        style="stop-color:#7c5cff;stop-opacity:0"/>
+    </linearGradient>
+
+    <linearGradient id="ringGrad2"
+      x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"
+        style="stop-color:#f59e0b;stop-opacity:1"/>
+      <stop offset="100%"
+        style="stop-color:#f59e0b;stop-opacity:0"/>
+    </linearGradient>
+
+    <!-- ── FILTERS ────────────────────────────────────────── -->
+
+    <filter id="softGlow"
+      x="-40%" y="-40%"
+      width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic"
+        stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="strongGlow"
+      x="-60%" y="-60%"
+      width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic"
+        stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="textGlow"
+      x="-20%" y="-40%"
+      width="140%" height="180%">
+      <feGaussianBlur in="SourceGraphic"
+        stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="dropShadow">
+      <feDropShadow dx="0" dy="4"
+        stdDeviation="8"
+        flood-color="#7c5cff"
+        flood-opacity="0.4"/>
+    </filter>
+
+    <!-- ── CLIP PATHS ─────────────────────────────────────── -->
+    <clipPath id="roundedClip">
+      <rect width="400" height="400" rx="40"/>
+    </clipPath>
+
+    <clipPath id="circleClip">
+      <circle cx="200" cy="200" r="138"/>
+    </clipPath>
+
+  </defs>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!--  BACKGROUND                                           -->
+  <!-- ══════════════════════════════════════════════════════ -->
+
+  <!-- Base background -->
+  <rect width="400" height="400"
+    rx="40" fill="url(#bgGrad)"/>
+
+  <!-- Subtle dot grid -->
+  <g opacity="0.08" clip-path="url(#roundedClip)">
+    <rect width="400" height="400"
+      fill="none"
+      stroke="#7c5cff"
+      stroke-width="0"
+      paint-order="stroke"/>
+    <!-- Horizontal lines -->
+    <line x1="0"   y1="50"  x2="400" y2="50"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="0"   y1="100" x2="400" y2="100"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="0"   y1="150" x2="400" y2="150"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="0"   y1="200" x2="400" y2="200"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="0"   y1="250" x2="400" y2="250"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="0"   y1="300" x2="400" y2="300"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="0"   y1="350" x2="400" y2="350"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <!-- Vertical lines -->
+    <line x1="50"  y1="0" x2="50"  y2="400"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="100" y1="0" x2="100" y2="400"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="150" y1="0" x2="150" y2="400"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="200" y1="0" x2="200" y2="400"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="250" y1="0" x2="250" y2="400"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="300" y1="0" x2="300" y2="400"
+      stroke="#7c5cff" stroke-width="0.4"/>
+    <line x1="350" y1="0" x2="350" y2="400"
+      stroke="#7c5cff" stroke-width="0.4"/>
+  </g>
+
+  <!-- Corner accent dots -->
+  <circle cx="24" cy="24" r="3"
+    fill="#7c5cff" opacity="0.5"/>
+  <circle cx="376" cy="24" r="3"
+    fill="#7c5cff" opacity="0.5"/>
+  <circle cx="24" cy="376" r="3"
+    fill="#7c5cff" opacity="0.5"/>
+  <circle cx="376" cy="376" r="3"
+    fill="#7c5cff" opacity="0.5"/>
+
+  <!-- Center radial glow -->
+  <circle cx="200" cy="180" r="180"
+    fill="url(#centerGlow)"/>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!--  OUTER DECORATIVE RINGS                               -->
+  <!-- ══════════════════════════════════════════════════════ -->
+
+  <!-- Static outer ring -->
+  <circle cx="200" cy="200" r="172"
+    fill="none"
+    stroke="#7c5cff"
+    stroke-width="0.8"
+    opacity="0.15"/>
+
+  <circle cx="200" cy="200" r="165"
+    fill="none"
+    stroke="#7c5cff"
+    stroke-width="0.5"
+    opacity="0.1"/>
+
+  <!-- ── Animated Arc 1 (Purple, clockwise) -->
+  <g filter="url(#softGlow)">
+    <circle cx="200" cy="200" r="160"
+      fill="none"
+      stroke="url(#ringGrad1)"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-dasharray="220 790"
+      opacity="0.9">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 200 200"
+        to="360 200 200"
+        dur="9s"
+        repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Glowing dot on Arc 1 -->
+  <g filter="url(#strongGlow)">
+    <circle cx="360" cy="200" r="5"
+      fill="#7c5cff"
+      opacity="0.95">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 200 200"
+        to="360 200 200"
+        dur="9s"
+        repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- ── Animated Arc 2 (Gold, counter-clockwise) -->
+  <g filter="url(#softGlow)">
+    <circle cx="200" cy="200" r="150"
+      fill="none"
+      stroke="url(#ringGrad2)"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-dasharray="100 843"
+      opacity="0.85">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="360 200 200"
+        to="0 200 200"
+        dur="7s"
+        repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Glowing dot on Arc 2 -->
+  <g filter="url(#softGlow)">
+    <circle cx="350" cy="200" r="4"
+      fill="#f59e0b"
+      opacity="0.9">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="360 200 200"
+        to="0 200 200"
+        dur="7s"
+        repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- ── Animated Arc 3 (Small, fast) -->
+  <circle cx="200" cy="200" r="142"
+    fill="none"
+    stroke="#5c8fff"
+    stroke-width="1"
+    stroke-linecap="round"
+    stroke-dasharray="60 834"
+    opacity="0.4">
+    <animateTransform
+      attributeName="transform"
+      type="rotate"
+      from="180 200 200"
+      to="540 200 200"
+      dur="5s"
+      repeatCount="indefinite"/>
+  </circle>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!--  MAIN CIRCLE                                          -->
+  <!-- ══════════════════════════════════════════════════════ -->
+
+  <!-- Main circle background -->
+  <circle cx="200" cy="200" r="138"
+    fill="#0c0c1a"
+    opacity="0.97"/>
+
+  <!-- Inner gradient overlay -->
+  <circle cx="200" cy="200" r="138"
+    fill="url(#mainGrad)"
+    opacity="0.06"/>
+
+  <!-- Inner ring -->
+  <circle cx="200" cy="200" r="136"
+    fill="none"
+    stroke="#7c5cff"
+    stroke-width="0.8"
+    opacity="0.2"/>
+
+  <!-- ── Clock Tick Marks ────────────────────────────────── -->
+  <g clip-path="url(#circleClip)"
+     stroke="#7c5cff"
+     stroke-linecap="round"
+     opacity="0.3">
+
+    <!-- 12 o'clock (top) — major -->
+    <line x1="200" y1="66"  x2="200" y2="80"  stroke-width="2.5"/>
+    <!-- 3 o'clock (right) — major -->
+    <line x1="320" y1="200" x2="334" y2="200" stroke-width="2.5"/>
+    <!-- 6 o'clock (bottom) — major -->
+    <line x1="200" y1="320" x2="200" y2="334" stroke-width="2.5"/>
+    <!-- 9 o'clock (left) — major -->
+    <line x1="66"  y1="200" x2="80"  y2="200" stroke-width="2.5"/>
+
+    <!-- Minor ticks -->
+    <line x1="267" y1="74"  x2="261" y2="86"  stroke-width="1.2"/>
+    <line x1="318" y1="133" x2="307" y2="139" stroke-width="1.2"/>
+    <line x1="318" y1="267" x2="307" y2="261" stroke-width="1.2"/>
+    <line x1="267" y1="318" x2="261" y2="307" stroke-width="1.2"/>
+    <line x1="133" y1="318" x2="139" y2="307" stroke-width="1.2"/>
+    <line x1="82"  y1="267" x2="93"  y2="261" stroke-width="1.2"/>
+    <line x1="82"  y1="133" x2="93"  y2="139" stroke-width="1.2"/>
+    <line x1="133" y1="74"  x2="139" y2="86"  stroke-width="1.2"/>
+  </g>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!--  LIGHTNING BOLT (Main Icon)                           -->
+  <!-- ══════════════════════════════════════════════════════ -->
+
+  <!-- Bolt glow shadow -->
+  <g transform="translate(200,185)" filter="url(#strongGlow)">
+    <polygon
+      points="10,-55 -20,5 0,5 -10,55 22,-5 2,-5"
+      fill="#7c5cff"
+      opacity="0.25"
+      transform="scale(1.25)"/>
+  </g>
+
+  <!-- Main Bolt -->
+  <g transform="translate(200,185)" filter="url(#softGlow)">
+    <polygon
+      points="10,-55 -20,5 0,5 -10,55 22,-5 2,-5"
+      fill="url(#boltGrad)"/>
+
+    <!-- Highlight on bolt -->
+    <polygon
+      points="10,-55 -20,5 0,5 -10,55 22,-5 2,-5"
+      fill="url(#shimmerGrad)"
+      opacity="0.6"/>
+
+    <!-- Gold accent stripe -->
+    <line x1="4" y1="-22" x2="-4" y2="22"
+      stroke="url(#goldGrad)"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      opacity="0.5"/>
+  </g>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!--  CLOCK HANDS                                          -->
+  <!-- ══════════════════════════════════════════════════════ -->
+
+  <!-- Minute hand (slow) -->
+  <g filter="url(#softGlow)">
+    <line x1="200" y1="200" x2="200" y2="95"
+      stroke="#7c5cff"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      opacity="0.5">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 200 200"
+        to="360 200 200"
+        dur="60s"
+        repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Second hand (fast, gold) -->
+  <g filter="url(#softGlow)">
+    <line x1="200" y1="200" x2="200" y2="80"
+      stroke="url(#handGrad)"
+      stroke-width="2"
+      stroke-linecap="round"
+      opacity="0.9">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 200 200"
+        to="360 200 200"
+        dur="10s"
+        repeatCount="indefinite"/>
+    </line>
+    <!-- Counter tail -->
+    <line x1="200" y1="200" x2="200" y2="222"
+      stroke="#f59e0b"
+      stroke-width="2"
+      stroke-linecap="round"
+      opacity="0.5">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 200 200"
+        to="360 200 200"
+        dur="10s"
+        repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Center pivot dot -->
+  <circle cx="200" cy="200" r="9"
+    fill="url(#mainGrad)"
+    filter="url(#softGlow)"/>
+  <circle cx="200" cy="200" r="5"
+    fill="#ffffff"
+    opacity="0.95"/>
+  <circle cx="200" cy="200" r="2.5"
+    fill="#7c5cff"/>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!--  BRAND TEXT                                           -->
+  <!-- ══════════════════════════════════════════════════════ -->
+
+  <!-- ELITE — Purple gradient text -->
+  <text
+    x="200" y="308"
+    text-anchor="middle"
+    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    font-weight="900"
+    font-size="30"
+    letter-spacing="9"
+    fill="url(#mainGrad)"
+    filter="url(#textGlow)">
+    ELITE
+  </text>
+
+  <!-- PACE — Gold text -->
+  <text
+    x="202" y="334"
+    text-anchor="middle"
+    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    font-weight="900"
+    font-size="22"
+    letter-spacing="13"
+    fill="url(#goldGrad)"
+    opacity="0.95">
+    PACE
+  </text>
+
+  <!-- Tagline -->
+  <text
+    x="200" y="356"
+    text-anchor="middle"
+    font-family="'Helvetica Neue', Arial, sans-serif"
+    font-weight="400"
+    font-size="8.5"
+    letter-spacing="2.5"
+    fill="#a0a0c0"
+    opacity="0.55">
+    REAL-TIME PRESENTATION TIMER
+  </text>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!--  SHIMMER ANIMATION OVERLAY                            -->
+  <!-- ══════════════════════════════════════════════════════ -->
+
+  <rect width="400" height="400"
+    rx="40"
+    fill="url(#shimmerGrad)"
+    opacity="0.4"
+    clip-path="url(#roundedClip)">
+    <animateTransform
+      attributeName="transform"
+      type="translate"
+      from="-500 -200"
+      to="500 200"
+      dur="4s"
+      repeatCount="indefinite"/>
+  </rect>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!--  BORDER                                               -->
+  <!-- ══════════════════════════════════════════════════════ -->
+
+  <!-- Outer border -->
+  <rect width="400" height="400"
+    rx="40"
+    fill="none"
+    stroke="url(#mainGrad)"
+    stroke-width="1.5"
+    opacity="0.35"/>
+
+  <!-- Inner border -->
+  <rect x="3" y="3" width="394" height="394"
+    rx="38"
+    fill="none"
+    stroke="#7c5cff"
+    stroke-width="0.5"
+    opacity="0.1"/>
+
+</svg>
